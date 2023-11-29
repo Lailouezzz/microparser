@@ -3,4 +3,6 @@ bin/
 build/
 doc/html
 doc/man
-microparser.a
+libmicroparser.a
+Makefile.cfg
+

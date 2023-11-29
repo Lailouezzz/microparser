@@ -36,8 +36,8 @@ mclean: clean
 # Clean everything
 
 fclean: clean 
-	$(call rmsg,Removing the output binary folder ($(OUTDIR)))
-	$(call qcmd,$(RM) -rf $(OUTDIR))
+	$(call rmsg,Removing the output library ($(LIB_PATH)))
+	$(call qcmd,$(RM) -rf $(LIB_PATH))
 
 # Clean libs
 
