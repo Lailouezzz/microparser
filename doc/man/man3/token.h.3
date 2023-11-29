@@ -1,0 +1,125 @@
+.TH "include/token.h" 3 "renderobj" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/token.h \- The token definition\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "union \fBu_token_data\fP"
+.br
+.RI "The data of token\&. "
+.ti -1c
+.RI "struct \fBs_token\fP"
+.br
+.RI "Describe a token\&. "
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef enum \fBe_io_type\fP \fBt_io_type\fP"
+.br
+.ti -1c
+.RI "typedef enum \fBe_token_type\fP \fBt_token_type\fP"
+.br
+.ti -1c
+.RI "typedef union \fBu_token_data\fP \fBt_token_data\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBs_token\fP \fBt_token\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBe_io_type\fP { \fBIO_IN\fP, \fBIO_HEREDOC\fP, \fBIO_OUT\fP, \fBIO_APPEND\fP, \fBIO__COUNT\fP }"
+.br
+.RI "The redirection io type\&. "
+.ti -1c
+.RI "enum \fBe_token_type\fP { \fBTOKEN_WORD\fP, \fBTOKEN_IO\fP, \fBTOKEN_END\fP, \fBTOKEN__COUNT\fP }"
+.br
+.RI "The token (lexeme type)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+The token definition\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+ale-boud (ale-boud@student.42.fr) 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2023-11-29 
+.RE
+.PP
+\fBCopyright\fP
+.RS 4
+Copyright (c) 2023 
+.RE
+.PP
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef enum \fBe_io_type\fP \fBt_io_type\fP"
+
+.SS "typedef struct \fBs_token\fP \fBt_token\fP"
+
+.SS "typedef union \fBu_token_data\fP \fBt_token_data\fP"
+
+.SS "typedef enum \fBe_token_type\fP \fBt_token_type\fP"
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBe_io_type\fP"
+
+.PP
+The redirection io type\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIIO_IN \fP\fP
+Redirect input '<'\&. 
+.TP
+\fB\fIIO_HEREDOC \fP\fP
+Redirect input with an heredoc '<<'\&. 
+.TP
+\fB\fIIO_OUT \fP\fP
+Redirect output '>'\&. 
+.TP
+\fB\fIIO_APPEND \fP\fP
+Redirect output in append mode '>>'\&. 
+.TP
+\fB\fIIO__COUNT \fP\fP
+.SS "enum \fBe_token_type\fP"
+
+.PP
+The token (lexeme type)\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fITOKEN_WORD \fP\fP
+Describe a word\&. (this is literally a sting) 
+.TP
+\fB\fITOKEN_IO \fP\fP
+Describe a redirection mode\&. {'<', '<<', '>>', '>'}\&. 
+.TP
+\fB\fITOKEN_END \fP\fP
+Describe the end\&. 
+.TP
+\fB\fITOKEN__COUNT \fP\fP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for renderobj from the source code\&.

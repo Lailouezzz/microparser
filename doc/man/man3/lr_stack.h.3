@@ -1,0 +1,77 @@
+.TH "include/lr_stack.h" 3 "renderobj" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/lr_stack.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include 'lr_parser\&.h'\fP
+.br
+\fC#include 'token\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBs_lr_stack_derived\fP"
+.br
+.ti -1c
+.RI "union \fBu_lr_stack_item_data\fP"
+.br
+.ti -1c
+.RI "struct \fBs_lr_stack_item\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef enum \fBe_lr_stack_item_type\fP \fBt_lr_stack_item_type\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBs_lr_stack_derived\fP \fBt_lr_stack_derived\fP"
+.br
+.ti -1c
+.RI "typedef union \fBu_lr_stack_item_data\fP \fBt_lr_stack_item_data\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBs_lr_stack_item\fP \fBt_lr_stack_item\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBe_lr_stack_item_type\fP { \fBITEM_TOKEN\fP, \fBITEM_DERIVED\fP, \fBITEM__COUNT\fP }"
+.br
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef struct \fBs_lr_stack_derived\fP \fBt_lr_stack_derived\fP"
+
+.SS "typedef struct \fBs_lr_stack_item\fP \fBt_lr_stack_item\fP"
+
+.SS "typedef union \fBu_lr_stack_item_data\fP \fBt_lr_stack_item_data\fP"
+
+.SS "typedef enum \fBe_lr_stack_item_type\fP \fBt_lr_stack_item_type\fP"
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBe_lr_stack_item_type\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIITEM_TOKEN \fP\fP
+.TP
+\fB\fIITEM_DERIVED \fP\fP
+.TP
+\fB\fIITEM__COUNT \fP\fP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for renderobj from the source code\&.
