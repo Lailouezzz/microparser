@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 06:12:13 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 12:31:08 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 12:59:56 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "lr_parser.h"
+#include "lr/parser.h"
 #include "prod.h"
 #include "token.h"
 #include "table.h"

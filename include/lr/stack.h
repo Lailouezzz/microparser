@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lr_parser.h                                        :+:      :+:    :+:   */
+/*   stack.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 11:12:29 by ale-boud         ###   ########.fr       */
+/*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
+/*   Updated: 2023/11/29 12:59:15 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file lr_parser.h
+ * @file stack.h
  * @author ale-boud (ale-boud@student.42.fr)
- * @brief LR parser definition.
+ * @brief The LR stack definition.
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef LR_PARSER_H
-# define LR_PARSER_H
+#ifndef STACK_H
+# define STACK_H
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -27,10 +27,10 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-# include <stdlib.h>
+# include <stddef.h>
 
-# include "lr_type.h"
-# include "lr_stack.h"
+# include "token.h"
+# include "lr/type.h"
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -38,39 +38,34 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-typedef enum e_lr_action_type {
-	ACTION_SHIFT,
-	ACTION_REDUCE,
-	ACTION_ERROR,
-	ACTION_ACCEPT,
-	ACTION__COUNT,
-}	t_lr_action_type;
+typedef enum e_lr_stack_item_type {
+	ITEM_TOKEN,
+	ITEM_DERIVED,
+	ITEM_AXIOM,
+	ITEM__COUNT,
+}	t_lr_stack_item_type;
 
-typedef union u_lr_action_data {
-	t_lr_state_id	shift_id;
-	t_lr_prod_id	reduce_id;
-}	t_lr_action_data;
+typedef struct s_lr_stack_derived {
+	void	(*prod_free_cb)(void *to_free);
+	void	*data;
+}	t_lr_stack_derived;
 
-typedef struct s_lr_action {
-	t_lr_action_type	type;
-	t_lr_action_data	data;
-}	t_lr_action;
+typedef union u_lr_stack_item_data {
+	t_token				token;
+	t_lr_stack_derived	derived;
+}	t_lr_stack_item_data;
 
-typedef struct s_lr_prod_cb {
-	void	*(*cb)(t_lr_stack_item *item);
-	size_t	size;
-	void	(*free_cb)(void *to_free);
-}	t_lr_prod_cb;
+typedef struct s_lr_stack_item {
+	t_lr_stack_item_type	type;
+	t_lr_stack_item_data	data;
+	t_lr_state_id			state_id;
+}	t_lr_stack_item;
 
-typedef struct s_lr_parser_ctx {
-	t_lr_prod_cb	*prod_cb;
-	t_lr_action		*action_table;
-	t_lr_state_id	*goto_table;
-	size_t			state_count;
-	size_t			token_count;
-	size_t			prod_count;
-	t_lr_stack		stack;
-}	t_lr_parser_ctx;
+typedef struct s_lr_stack {
+	t_lr_stack_item	*data;
+	size_t			alloced;
+	size_t			used;
+}	t_lr_stack;
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -78,26 +73,35 @@ typedef struct s_lr_parser_ctx {
 // *                                                                        * //
 // ************************************************************************** //
 
-/**
- * @brief 
- * @param ctx The parser context.
- * (prod_cb, action_table, goto_table, state_count, token_count, prod_count)
- *     /!\ MUST BE SET.
- * @return int 0 if success. non null value if error.
- */
-int		lr_parser_init(
-			t_lr_parser_ctx *ctx
-			);
+int				lr_stack_init(
+					t_lr_stack *stack
+					);
 
-int		lr_parser_exec(
-			t_lr_parser_ctx *ctx,
-			t_token *tokens,
-			size_t nb,
-			void **derived
-			);
+void			lr_stack_destroy(
+					t_lr_stack *stack
+					);
 
-void	lr_parser_destroy(
-			t_lr_parser_ctx *ctx
-			);
+size_t			lr_stack_used(
+					const t_lr_stack *stack
+					);
+
+int				lr_stack_push(
+					t_lr_stack *stack,
+					const t_lr_stack_item *item
+					);
+
+int				lr_stack_pop(
+					t_lr_stack *stack,
+					t_lr_stack_item *item
+					);
+
+int				lr_stack_popn(
+					t_lr_stack *stack,
+					size_t count
+					);
+
+t_lr_state_id	lr_stack_cur_state(
+					t_lr_stack *stack
+					);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 11:15:10 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 13:10:36 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-#include "lr_parser.h"
+#include "lr/parser.h"
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -141,12 +141,22 @@ static int	_lr_parser_exec(
 	const t_lr_action	action = _lr_parser_get_action(ctx, tokens[*k]);
 
 	if (action.type == ACTION_ACCEPT)
+	{
 		return (2);
-	else if (action.type == ACTION_SHIFT)
-		_lr_parser_shift(ctx, tokens[(*k)++], action.data.shift_id);
-	else if (action.type == ACTION_REDUCE)
-		_lr_parser_reduce(ctx, action.data.reduce_id);
-	else
+	}
+	else if (action.type == ACTION_SHIFT
+		&& _lr_parser_shift(ctx, tokens[(*k)++], action.data.shift_id))
+	{
+		lr_stack_destroy(&ctx->stack);
+		return (1);
+	}
+	else if (action.type == ACTION_REDUCE
+		&& _lr_parser_reduce(ctx, action.data.reduce_id))
+	{
+		lr_stack_destroy(&ctx->stack);
+		return (1);
+	}
+	else if (action.type == ACTION_ERROR)
 	{
 		lr_stack_destroy(&ctx->stack);
 		return (1);
@@ -180,6 +190,8 @@ static int	_lr_parser_reduce(
 	data = NULL;
 	if (prod_cb.cb != NULL)
 		data = prod_cb.cb(ctx->stack.data + ctx->stack.used - prod_cb.size);
+	if (prod_cb.cb != NULL && data == NULL)
+		return (1);
 	if (lr_stack_popn(&ctx->stack, prod_cb.size))
 	{
 		if (prod_cb.free_cb != NULL)
