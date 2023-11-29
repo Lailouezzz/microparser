@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 12:59:15 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 13:40:01 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # include <stddef.h>
 
-# include "token.h"
+# include "lr/token.h"
 # include "lr/type.h"
 
 // ************************************************************************** //
@@ -51,7 +51,7 @@ typedef struct s_lr_stack_derived {
 }	t_lr_stack_derived;
 
 typedef union u_lr_stack_item_data {
-	t_token				token;
+	t_lr_token			token;
 	t_lr_stack_derived	derived;
 }	t_lr_stack_item_data;
 

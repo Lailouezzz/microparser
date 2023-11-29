@@ -16,7 +16,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 # Default target
-all: all-renderobj
+all: all-microparser
 
 # Include vars and msg module
 include Makefile.vars Makefile.msg
@@ -85,13 +85,13 @@ Makefile.cfg:
 # Build targets
 # ---
 
-all-renderobj: $(LIBS_MAKE_RULE) $(BIN_PATH)
+all-microparser: $(LIBS_MAKE_RULE) $(LIB_PATH)
 
 # Make the binary
 
-$(BIN_PATH): $(OBJS)
+$(LIB_PATH): $(OBJS)
 	$(call qcmd,$(MKDIR) -p $(@D))
-	$(call bcmd,ld,$(OBJS),$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LD_LIBS))
+	$(call bcmd,ar,$(OBJS),$(AR) rcs -o $@ $(OBJS) $(LD_LIBS))
 
 # Make objects
 

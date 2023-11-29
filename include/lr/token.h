@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   type.h                                             :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 02:47:15 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 13:40:30 by ale-boud         ###   ########.fr       */
+/*   Created: 2023/11/29 13:36:04 by ale-boud          #+#    #+#             */
+/*   Updated: 2023/11/29 13:41:40 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file type.h
+ * @file token.h
  * @author ale-boud (ale-boud@student.42.fr)
- * @brief The types definition for LR parser.
+ * @brief Definition of tokens.
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef TYPE_H
-# define TYPE_H
+#ifndef TOKEN_H
+# define TOKEN_H
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Typedefs.                                                              * //
+// * Structure definitions.                                                 * //
 // *                                                                        * //
 // ************************************************************************** //
 
-typedef int	t_lr_state_id;
-typedef int	t_lr_prod_id;
+typedef int	t_lr_token_id;
+
+typedef struct s_lr_token {
+	t_lr_token_id	id;
+	void			*data;
+}	t_lr_token;
 
 #endif

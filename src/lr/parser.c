@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 13:10:36 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 13:41:40 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@
 
 static int				_lr_parser_exec(
 							t_lr_parser_ctx *ctx,
-							t_token *tokens,
+							t_lr_token *tokens,
 							size_t *k
 							);
 
 static int				_lr_parser_shift(
 							t_lr_parser_ctx *ctx,
-							t_token token,
+							t_lr_token token,
 							t_lr_state_id state_id
 							);
 
@@ -62,7 +62,7 @@ static t_lr_prod_cb		_lr_parser_get_prod_cb(
 
 static t_lr_action		_lr_parser_get_action(
 							t_lr_parser_ctx *ctx,
-							t_token	token
+							t_lr_token	token
 							);
 
 // ************************************************************************** //
@@ -90,7 +90,7 @@ int	lr_parser_init(
 
 int	lr_parser_exec(
 		t_lr_parser_ctx *ctx,
-		t_token *tokens,
+		t_lr_token *tokens,
 		size_t nb,
 		void **derived
 		)
@@ -134,7 +134,7 @@ void	lr_parser_destroy(
 
 static int	_lr_parser_exec(
 				t_lr_parser_ctx *ctx,
-				t_token *tokens,
+				t_lr_token *tokens,
 				size_t *k
 				)
 {
@@ -166,7 +166,7 @@ static int	_lr_parser_exec(
 
 static int	_lr_parser_shift(
 				t_lr_parser_ctx *ctx,
-				t_token token,
+				t_lr_token token,
 				t_lr_state_id state_id
 				)
 {
@@ -228,10 +228,10 @@ static t_lr_prod_cb	_lr_parser_get_prod_cb(
 
 static t_lr_action	_lr_parser_get_action(
 						t_lr_parser_ctx *ctx,
-						t_token	token
+						t_lr_token	token
 						)
 {
 	const t_lr_state_id	cur_state = lr_stack_cur_state(&ctx->stack);
 
-	return (ctx->action_table[ctx->token_count * cur_state + token.type]);
+	return (ctx->action_table[ctx->token_count * cur_state + token.id]);
 }

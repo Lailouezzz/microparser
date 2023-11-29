@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 12:59:09 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 13:40:06 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 
 # include <stdlib.h>
 
+# include "lr/token.h"
 # include "lr/type.h"
 # include "lr/stack.h"
 
@@ -91,7 +92,7 @@ int		lr_parser_init(
 
 int		lr_parser_exec(
 			t_lr_parser_ctx *ctx,
-			t_token *tokens,
+			t_lr_token *tokens,
 			size_t nb,
 			void **derived
 			);
