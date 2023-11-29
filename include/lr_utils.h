@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   lr_utils.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:16:04 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 12:59:34 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 14:08:14 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file utils.h
+ * @file lr_utils.h
  * @author ale-boud (ale-boud@student.42.fr)
  * @brief The helpers definition.
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef UTILS_H
-# define UTILS_H
+#ifndef LR_UTILS_H
+# define LR_UTILS_H
 
 // ************************************************************************** //
 // *                                                                        * //
