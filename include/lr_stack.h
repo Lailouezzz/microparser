@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack.h                                            :+:      :+:    :+:   */
+/*   lr_stack.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 13:40:01 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 13:50:29 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file stack.h
+ * @file lr_stack.h
  * @author ale-boud (ale-boud@student.42.fr)
  * @brief The LR stack definition.
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef STACK_H
-# define STACK_H
+#ifndef LR_STACK_H
+# define LR_STACK_H
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -29,8 +29,8 @@
 
 # include <stddef.h>
 
-# include "lr/token.h"
-# include "lr/type.h"
+# include "lr_token.h"
+# include "lr_type.h"
 
 // ************************************************************************** //
 // *                                                                        * //

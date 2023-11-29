@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   lr_parser.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 13:40:06 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 13:50:42 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file parser.h
+ * @file lr_parser.h
  * @author ale-boud (ale-boud@student.42.fr)
  * @brief LR parser definition.
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef LR_PARSER_H
+# define LR_PARSER_H
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -29,9 +29,9 @@
 
 # include <stdlib.h>
 
-# include "lr/token.h"
-# include "lr/type.h"
-# include "lr/stack.h"
+# include "lr_token.h"
+# include "lr_type.h"
+# include "lr_stack.h"
 
 // ************************************************************************** //
 // *                                                                        * //
