@@ -70,3 +70,15 @@ int	ft_strlen(
 		++k;
 	return (k);
 }
+
+char	*ft_strdup(
+			const char *str
+			)
+{
+	char	*s;
+
+	s = malloc(ft_strlen(str) + 1);
+	if (s == NULL)
+		return (NULL);
+	return (ft_memcpy(s, str, ft_strlen(str) + 1));
+}

@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lr_stack.h                                         :+:      :+:    :+:   */
+/*   table.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 07:39:23 by ale-boud         ###   ########.fr       */
+/*   Created: 2023/11/29 02:31:34 by ale-boud          #+#    #+#             */
+/*   Updated: 2023/11/29 07:25:46 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file lrstack.h
+ * @file table.h
  * @author ale-boud (ale-boud@student.42.fr)
- * @brief The LR stack definition.
+ * @brief The LR tables definition.
+ * @see	https://dpt-info-sciences.univ-rouen.fr/~bedonnic/ :3
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef LR_STACK_H
-# define LR_STACK_H
+#ifndef TABLE_H
+# define TABLE_H
+
+// ************************************************************************** //
+// *                                                                        * //
+// * Defines.                                                              * //
+// *                                                                        * //
+// ************************************************************************** //
+
+# define STATE__COUNT 13
 
 // ************************************************************************** //
 // *                                                                        * //
@@ -27,81 +36,16 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-# include <stddef.h>
-
 # include "token.h"
-# include "lr_type.h"
+# include "prod.h"
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Structure definition.                                                  * //
+// * LR tables definition.                                                  * //
 // *                                                                        * //
 // ************************************************************************** //
 
-typedef enum e_lr_stack_item_type {
-	ITEM_TOKEN,
-	ITEM_DERIVED,
-	ITEM_AXIOM,
-	ITEM__COUNT,
-}	t_lr_stack_item_type;
-
-typedef struct s_lr_stack_derived {
-	void	(*prod_free_cb)(void *to_free);
-	void	*data;
-}	t_lr_stack_derived;
-
-typedef union u_lr_stack_item_data {
-	t_token				token;
-	t_lr_stack_derived	derived;
-}	t_lr_stack_item_data;
-
-typedef struct s_lr_stack_item {
-	t_lr_stack_item_type	type;
-	t_lr_stack_item_data	data;
-	t_lr_state_id			state_id;
-}	t_lr_stack_item;
-
-typedef struct s_lr_stack {
-	t_lr_stack_item	*data;
-	size_t			alloced;
-	size_t			used;
-}	t_lr_stack;
-
-// ************************************************************************** //
-// *                                                                        * //
-// * Function prototypes.                                                   * //
-// *                                                                        * //
-// ************************************************************************** //
-
-int				lr_stack_init(
-					t_lr_stack *stack
-					);
-
-void			lr_stack_destroy(
-					t_lr_stack *stack
-					);
-
-size_t			lr_stack_used(
-					const t_lr_stack *stack
-					);
-
-int				lr_stack_push(
-					t_lr_stack *stack,
-					const t_lr_stack_item *item
-					);
-
-int				lr_stack_pop(
-					t_lr_stack *stack,
-					t_lr_stack_item *item
-					);
-
-int				lr_stack_popn(
-					t_lr_stack *stack,
-					size_t count
-					);
-
-t_lr_state_id	lr_stack_cur_state(
-					t_lr_stack *stack
-					);
+extern const t_lr_action	g_lr_table[STATE__COUNT][TOKEN__COUNT];
+extern const t_lr_state_id	g_lr_goto_table[STATE__COUNT][PROD__COUNT];
 
 #endif

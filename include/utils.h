@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:16:04 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 04:20:45 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 08:05:26 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,10 @@ void	*ft_memcpy(
 			);
 
 int		ft_strlen(
+			const char *str
+			);
+
+char	*ft_strdup(
 			const char *str
 			);
 

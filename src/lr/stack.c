@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:26:00 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 06:10:13 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 07:47:10 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,20 @@ int	lr_stack_init(
 }
 
 void	lr_stack_destroy(
-			t_lr_stack *stack,
-			void (*free_derived)(void*)
+			t_lr_stack *stack
 			)
 {
 	size_t	k;
 
 	k = 0;
-	if (free_derived != NULL)
-		while (k < stack->used)
-			if (stack->data[k].type == ITEM_DERIVED)
-				free_derived(stack->data[k++].data.derived.data);
+	while (k < stack->used)
+	{
+		if (stack->data[k].type == ITEM_DERIVED
+			&& stack->data[k].data.derived.prod_free_cb != NULL)
+			stack->data[k].data.derived.prod_free_cb(
+				stack->data[k].data.derived.data);
+		++k;
+	}
 	free(stack->data);
 }
 
@@ -74,7 +77,8 @@ int	lr_stack_push(
 	if (stack->used >= stack->alloced)
 	{
 		stack->data
-			= ft_realloc(stack->data, stack->alloced, stack->alloced * 2);
+			= ft_realloc(stack->data, stack->alloced * sizeof(*stack->data),
+				stack->alloced * 2 * sizeof(*stack->data));
 		stack->alloced *= 2;
 		if (stack->data == NULL)
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 06:09:58 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 07:50:39 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ int	lr_parser_init(
 
 	if (lr_stack_init(&ctx->stack))
 		return (1);
-	axiom = (t_lr_stack_item){ITEM_AXIOM, {}, 0};
+	axiom = (t_lr_stack_item){.type = ITEM_AXIOM, .data = {}, .state_id = 0};
 	if (lr_stack_push(&ctx->stack, &axiom))
 	{
-		lr_stack_destroy(&ctx->stack, NULL);
+		lr_stack_destroy(&ctx->stack);
 		return (1);
 	}
 	return (0);
@@ -108,13 +108,14 @@ int	lr_parser_exec(
 			return (1);
 	}
 	++k;
-	if (k != nb || lr_stack_used(&ctx->stack) != 1
-		|| ctx->stack.data[0].type != ITEM_DERIVED)
+	if (k != nb || lr_stack_used(&ctx->stack) != 2
+		|| ctx->stack.data[1].type != ITEM_DERIVED)
 	{
-		lr_stack_destroy(&ctx->stack, ctx->free_derived);
+		lr_stack_destroy(&ctx->stack);
 		return (1);
 	}
-	*derived = ctx->stack.data[0].data.derived.data;
+	*derived = ctx->stack.data[1].data.derived.data;
+	lr_stack_destroy(&ctx->stack);
 	return (0);
 }
 
@@ -140,7 +141,7 @@ static int	_lr_parser_exec(
 		_lr_parser_reduce(ctx, action.data.reduce_id);
 	else
 	{
-		lr_stack_destroy(&ctx->stack, ctx->free_derived);
+		lr_stack_destroy(&ctx->stack);
 		return (1);
 	}
 	return (0);
@@ -154,6 +155,7 @@ static int	_lr_parser_shift(
 {
 	t_lr_stack_item	item;
 
+	printf("Shift %d (state: %d)\n", token.type, lr_stack_cur_state(&ctx->stack) + 1);
 	item.type = ITEM_TOKEN;
 	item.data.token = token;
 	item.state_id = state_id;
@@ -169,19 +171,21 @@ static int	_lr_parser_reduce(
 	void				*data;
 	t_lr_stack_item		item;
 
+	printf("Reduce %d (state: %d)\n", prod_id, lr_stack_cur_state(&ctx->stack) + 1);
 	data = NULL;
 	if (prod_cb.cb != NULL)
 		data = prod_cb.cb(ctx->stack.data - prod_cb.size);
 	if (lr_stack_popn(&ctx->stack, prod_cb.size))
 	{
-		ctx->free_derived(data);
+		if (prod_cb.free_cb != NULL)
+			prod_cb.free_cb(data);
 		return (1);
 	}
 	item = (t_lr_stack_item){
 		.type = ITEM_DERIVED,
 		.data.derived = {
 		.data = data,
-		.prod_id = prod_id,
+		.prod_free_cb = prod_cb.free_cb,
 	},
 		_lr_parser_get_goto(ctx, lr_stack_cur_state(&ctx->stack), prod_id),
 	};

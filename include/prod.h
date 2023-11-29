@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:40:36 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 03:34:44 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 07:43:57 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,40 +67,80 @@ void	*_prod_command__1_cb(
 			t_lr_stack_item *item
 			);
 
+void	_prod_command__1_free_cb(
+			void *item
+			);
+
 void	*_prod_command__2_cb(
 			t_lr_stack_item *item
+			);
+
+void	_prod_command__2_free_cb(
+			void *item
 			);
 
 void	*_prod_command_simple__1_cb(
 			t_lr_stack_item *item
 			);
 
+void	_prod_command_simple__1_free_cb(
+			void *item
+			);
+
 void	*_prod_command_simple__2_cb(
 			t_lr_stack_item *item
+			);
+
+void	_prod_command_simple__2_free_cb(
+			void *item
 			);
 
 void	*_prod_args__1_cb(
 			t_lr_stack_item *item
 			);
 
+void	_prod_args__1_free_cb(
+			void *item
+			);
+
 void	*_prod_args__2_cb(
 			t_lr_stack_item *item
+			);
+
+void	_prod_args__2_free_cb(
+			void *item
 			);
 
 void	*_prod_progname_cb(
 			t_lr_stack_item *item
 			);
 
+void	_prod_progname_free_cb(
+			void *item
+			);
+
 void	*_prod_command_io__1_cb(
 			t_lr_stack_item *item
+			);
+
+void	_prod_command_io__1_free_cb(
+			void *item
 			);
 
 void	*_prod_command_io__2_cb(
 			t_lr_stack_item *item
 			);
 
+void	_prod_command_io__2_free_cb(
+			void *item
+			);
+
 void	*_prod_io_info_cb(
 			t_lr_stack_item *item
+			);
+
+void	_prod_io_info_free_cb(
+			void *item
 			);
 
 #endif

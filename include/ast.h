@@ -1,107 +1,94 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lr_stack.h                                         :+:      :+:    :+:   */
+/*   ast.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 07:39:23 by ale-boud         ###   ########.fr       */
+/*   Created: 2023/11/29 08:02:47 by ale-boud          #+#    #+#             */
+/*   Updated: 2023/11/29 08:44:08 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file lrstack.h
+ * @file ast.h
  * @author ale-boud (ale-boud@student.42.fr)
- * @brief The LR stack definition.
+ * @brief The AST definition.
  * @date 2023-11-29
  * @copyright Copyright (c) 2023
  */
 
-#ifndef LR_STACK_H
-# define LR_STACK_H
+#ifndef AST_H
+# define AST_H
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Includes.                                                              * //
+// * Includes                                                               * //
 // *                                                                        * //
 // ************************************************************************** //
 
-# include <stddef.h>
+# include <stdlib.h>
 
 # include "token.h"
-# include "lr_type.h"
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Structure definition.                                                  * //
+// * Structure definitions.                                                 * //
 // *                                                                        * //
 // ************************************************************************** //
 
-typedef enum e_lr_stack_item_type {
-	ITEM_TOKEN,
-	ITEM_DERIVED,
-	ITEM_AXIOM,
-	ITEM__COUNT,
-}	t_lr_stack_item_type;
+typedef char	*t_progname;
 
-typedef struct s_lr_stack_derived {
-	void	(*prod_free_cb)(void *to_free);
-	void	*data;
-}	t_lr_stack_derived;
+typedef char	**t_args;
 
-typedef union u_lr_stack_item_data {
-	t_token				token;
-	t_lr_stack_derived	derived;
-}	t_lr_stack_item_data;
+typedef struct s_io_info {
+	t_io_type	type;
+	char		*file;
+}	t_io_info;
 
-typedef struct s_lr_stack_item {
-	t_lr_stack_item_type	type;
-	t_lr_stack_item_data	data;
-	t_lr_state_id			state_id;
-}	t_lr_stack_item;
+typedef struct s_command_io {
+	t_io_info	*io_infos;
+	size_t		alloced;
+	size_t		used;
+}	t_command_io;
 
-typedef struct s_lr_stack {
-	t_lr_stack_item	*data;
-	size_t			alloced;
-	size_t			used;
-}	t_lr_stack;
+typedef struct s_command {
+	t_progname		pn;
+	t_args			args;
+	t_command_io	*cio;
+}	t_command;
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Function prototypes.                                                   * //
+// * Function definition.                                                   * //
 // *                                                                        * //
 // ************************************************************************** //
 
-int				lr_stack_init(
-					t_lr_stack *stack
+t_args			args_create(
+					const char *str
 					);
 
-void			lr_stack_destroy(
-					t_lr_stack *stack
+t_args			args_append(
+					t_args args,
+					const char *str
 					);
 
-size_t			lr_stack_used(
-					const t_lr_stack *stack
+t_io_info		*io_info_create(
+					t_io_type type,
+					const char *str
 					);
 
-int				lr_stack_push(
-					t_lr_stack *stack,
-					const t_lr_stack_item *item
+t_command_io	*cio_create(
+					t_io_info io_info
 					);
 
-int				lr_stack_pop(
-					t_lr_stack *stack,
-					t_lr_stack_item *item
+int				cio_append(
+					t_command_io *cio,
+					t_io_info io_info
 					);
 
-int				lr_stack_popn(
-					t_lr_stack *stack,
-					size_t count
-					);
-
-t_lr_state_id	lr_stack_cur_state(
-					t_lr_stack *stack
+t_command		*command_create(
+					t_progname pn
 					);
 
 #endif

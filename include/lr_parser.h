@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 06:08:02 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 07:36:41 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_lr_action {
 typedef struct s_lr_prod_cb {
 	void	*(*cb)(t_lr_stack_item *item);
 	size_t	size;
+	void	(*free_cb)(void *to_free);
 }	t_lr_prod_cb;
 
 typedef struct s_lr_parser_ctx {
@@ -68,7 +69,6 @@ typedef struct s_lr_parser_ctx {
 	size_t			state_count;
 	size_t			token_count;
 	size_t			prod_count;
-	void			(*free_derived)(void*);
 	t_lr_stack		stack;
 }	t_lr_parser_ctx;
 
