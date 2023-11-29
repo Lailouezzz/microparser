@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:26:00 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 07:47:10 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:14:32 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	lr_stack_destroy(
 		++k;
 	}
 	free(stack->data);
+	stack->used = 0;
+	stack->alloced = 0;
 }
 
 size_t	lr_stack_used(

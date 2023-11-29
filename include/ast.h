@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 08:02:47 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 08:44:08 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:19:12 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_io_info {
 }	t_io_info;
 
 typedef struct s_command_io {
-	t_io_info	*io_infos;
+	t_io_info	**io_infos;
 	size_t		alloced;
 	size_t		used;
 }	t_command_io;
@@ -73,22 +73,48 @@ t_args			args_append(
 					const char *str
 					);
 
+void			args_destroy(
+					t_args args
+					);
+
 t_io_info		*io_info_create(
 					t_io_type type,
 					const char *str
 					);
 
+void			io_info_destroy(
+					t_io_info *io_info
+					);
+
 t_command_io	*cio_create(
-					t_io_info io_info
+					t_io_info *io_info
 					);
 
 int				cio_append(
 					t_command_io *cio,
-					t_io_info io_info
+					t_io_info *io_info
+					);
+
+void			cio_destroy(
+					t_command_io *cio
 					);
 
 t_command		*command_create(
 					t_progname pn
+					);
+
+t_command		*command_create_args(
+					t_progname pn,
+					t_args args
+					);
+
+int				command_add_io(
+					t_command *command,
+					t_command_io *cio
+					);
+
+void			command_destroy(
+					t_command *command
 					);
 
 #endif

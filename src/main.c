@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 06:12:13 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 07:55:20 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 12:31:08 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,51 @@
 // ************************************************************************** //
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "lr_parser.h"
 #include "prod.h"
 #include "token.h"
 #include "table.h"
+#include "ast.h"
 
 t_token	g_tokens[] = {
 {.type = TOKEN_WORD, .data.word = "cat"},
-{.type = TOKEN_WORD, .data.word = "file"},
-{.type = TOKEN_WORD, .data.word = "bite"},
-{.type = TOKEN_IO, .data.io_type = IO_IN},
-{.type = TOKEN_WORD, .data.word = "coiuille"},
+{.type = TOKEN_WORD, .data.word = "file1"},
+{.type = TOKEN_WORD, .data.word = "file2"},
 {.type = TOKEN_IO, .data.io_type = IO_OUT},
-{.type = TOKEN_WORD, .data.word = "zizi"},
-{.type = TOKEN_END, {}},
+{.type = TOKEN_WORD, .data.word = "outfile"},
+{.type = TOKEN_END, {}}
 };
+
+static void	command_print(t_command *command)
+{
+	char	**pstr;
+	size_t	k;
+
+	printf("Programme name: %s\nargs: ", command->pn);
+	pstr = command->args;
+	while (*pstr != NULL)
+	{
+		printf("\"%s\" ", *pstr);
+		++pstr;
+	}
+	printf("NULL\n");
+	k = 0;
+	while (k < command->cio->used)
+	{
+		if (command->cio->io_infos[k]->type == IO_IN)
+			printf("IN file: ");
+		if (command->cio->io_infos[k]->type == IO_APPEND)
+			printf("APPEND file: ");
+		if (command->cio->io_infos[k]->type == IO_OUT)
+			printf("OUT file: ");
+		if (command->cio->io_infos[k]->type == IO_HEREDOC)
+			printf("HEREDOC: ");
+		printf("\"%s\"\n", command->cio->io_infos[k]->file);
+		++k;
+	}
+}
 
 int	main(void)
 {
@@ -58,5 +87,8 @@ int	main(void)
 	if (lr_parser_exec(&ctx, g_tokens, sizeof(g_tokens) / sizeof(*g_tokens),
 			&data))
 		return (EXIT_FAILURE);
+	lr_parser_destroy(&ctx);
+	command_print(data);
+	command_destroy(data);
 	return (EXIT_SUCCESS);
 }

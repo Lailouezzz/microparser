@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 07:50:39 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:15:10 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,15 @@ int	lr_parser_exec(
 		return (1);
 	}
 	*derived = ctx->stack.data[1].data.derived.data;
-	lr_stack_destroy(&ctx->stack);
+	ctx->stack.used = 1;
 	return (0);
+}
+
+void	lr_parser_destroy(
+			t_lr_parser_ctx *ctx
+			)
+{
+	lr_stack_destroy(&ctx->stack);
 }
 
 // ************************************************************************** //
@@ -155,7 +162,6 @@ static int	_lr_parser_shift(
 {
 	t_lr_stack_item	item;
 
-	printf("Shift %d (state: %d)\n", token.type, lr_stack_cur_state(&ctx->stack) + 1);
 	item.type = ITEM_TOKEN;
 	item.data.token = token;
 	item.state_id = state_id;
@@ -171,10 +177,9 @@ static int	_lr_parser_reduce(
 	void				*data;
 	t_lr_stack_item		item;
 
-	printf("Reduce %d (state: %d)\n", prod_id, lr_stack_cur_state(&ctx->stack) + 1);
 	data = NULL;
 	if (prod_cb.cb != NULL)
-		data = prod_cb.cb(ctx->stack.data - prod_cb.size);
+		data = prod_cb.cb(ctx->stack.data + ctx->stack.used - prod_cb.size);
 	if (lr_stack_popn(&ctx->stack, prod_cb.size))
 	{
 		if (prod_cb.free_cb != NULL)

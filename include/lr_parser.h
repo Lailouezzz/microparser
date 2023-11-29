@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 07:36:41 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:12:29 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,10 @@ int		lr_parser_exec(
 			t_token *tokens,
 			size_t nb,
 			void **derived
+			);
+
+void	lr_parser_destroy(
+			t_lr_parser_ctx *ctx
 			);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 02:53:20 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 08:49:34 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 10:58:41 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,147 +60,146 @@ void	*_prod_command__1_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (item[0].data.derived.data);
 }
 
 void	_prod_command__1_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	command_destroy(to_free);
 }
 
 void	*_prod_command__2_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	if (command_add_io(item[0].data.derived.data, item[1].data.derived.data))
+		return (NULL);
+	return (item[0].data.derived.data);
 }
 
 void	_prod_command__2_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	command_destroy(to_free);
 }
 
 void	*_prod_command_simple__1_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (command_create((t_progname)item[0].data.derived.data));
 }
 
 void	_prod_command_simple__1_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	command_destroy(to_free);
 }
 
 void	*_prod_command_simple__2_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (command_create_args(item[0].data.derived.data,
+			item[1].data.derived.data));
 }
 
 void	_prod_command_simple__2_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	command_destroy(to_free);
 }
 
 void	*_prod_args__1_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (args_create(item[0].data.token.data.word));
 }
 
 void	_prod_args__1_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	args_destroy(to_free);
 }
 
 void	*_prod_args__2_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (args_append(item[1].data.derived.data,
+			item[0].data.token.data.word));
 }
 
 void	_prod_args__2_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	args_destroy(to_free);
 }
 
 void	*_prod_progname_cb(
 			t_lr_stack_item *item
 			)
 {
-	return (ft_strdup(item->data.token.data.word));
+	return (ft_strdup(item[0].data.token.data.word));
 }
 
 void	_prod_progname_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	free(to_free);
 }
 
 void	*_prod_command_io__1_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (cio_create((t_io_info *)item[0].data.derived.data));
 }
 
 void	_prod_command_io__1_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	cio_destroy(to_free);
 }
 
 void	*_prod_command_io__2_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	if (cio_append((t_command_io *)item[1].data.derived.data,
+			(t_io_info *)item[0].data.derived.data))
+		return (NULL);
+	return (item[1].data.derived.data);
 }
 
 void	_prod_command_io__2_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	cio_destroy(to_free);
 }
 
 void	*_prod_io_info_cb(
 			t_lr_stack_item *item
 			)
 {
-	(void)(item);
-	return (NULL);
+	return (io_info_create(item[0].data.token.data.io_type,
+			item[1].data.token.data.word));
 }
 
 void	_prod_io_info_free_cb(
 			void *to_free
 			)
 {
-	(void)(to_free);
+	io_info_destroy(to_free);
 }

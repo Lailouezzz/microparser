@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 08:25:01 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 08:45:49 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:38:25 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 // ************************************************************************** //
 
 static void	_strs_free(
-				const char **str
+				char **str
 				);
 
 // ************************************************************************** //
@@ -82,16 +82,25 @@ t_args	args_append(
 		_strs_free(args);
 		return (NULL);
 	}
-	ft_memcpy(nargs, args, k * sizeof(*nargs));
-	nargs[k] = ft_strdup(str);
-	if (nargs[k] == NULL)
+	ft_memcpy(nargs + 1, args, k * sizeof(*nargs));
+	nargs[0] = ft_strdup(str);
+	if (nargs[0] == NULL)
 	{
 		_strs_free(args);
 		free(nargs);
 		return (NULL);
 	}
 	nargs[k + 1] = NULL;
+	free(args);
 	return (nargs);
+}
+
+void	args_destroy(
+			t_args args
+			)
+{
+	_strs_free(args);
+	free(args);
 }
 
 t_io_info	*io_info_create(
@@ -114,8 +123,17 @@ t_io_info	*io_info_create(
 	return (io_info);
 }
 
+void	io_info_destroy(
+			t_io_info *io_info
+			)
+{
+	if (io_info->file != NULL)
+		free(io_info->file);
+	free(io_info);
+}
+
 t_command_io	*cio_create(
-					t_io_info io_info
+					t_io_info *io_info
 					)
 {
 	t_command_io	*cio;
@@ -137,7 +155,7 @@ t_command_io	*cio_create(
 
 int	cio_append(
 		t_command_io *cio,
-		t_io_info io_info
+		t_io_info *io_info
 		)
 {
 	if (cio->used >= cio->alloced)
@@ -149,11 +167,30 @@ int	cio_append(
 		if (cio->io_infos == NULL)
 		{
 			free(cio);
-			return (NULL);
+			return (1);
 		}
 	}
 	cio->io_infos[cio->used++] = io_info;
 	return (0);
+}
+
+void	cio_destroy(
+			t_command_io *cio
+			)
+{
+	size_t	k;
+
+	k = 0;
+	if (cio->io_infos != NULL)
+	{
+		while (k < cio->used)
+		{
+			io_info_destroy(cio->io_infos[k]);
+			++k;
+		}
+		free(cio->io_infos);
+	}
+	free(cio);
 }
 
 t_command	*command_create(
@@ -163,7 +200,7 @@ t_command	*command_create(
 	t_command	*command;
 
 	command = malloc(sizeof(*command));
-	if (command != NULL)
+	if (command == NULL)
 		return (NULL);
 	command->cio = NULL;
 	command->pn = pn;
@@ -174,6 +211,45 @@ t_command	*command_create(
 		return (NULL);
 	}
 	command->args[0] = NULL;
+	return (command);
+}
+
+t_command	*command_create_args(
+				t_progname pn,
+				t_args args
+				)
+{
+	t_command	*command;
+
+	command = command_create(pn);
+	if (command == NULL)
+		return (NULL);
+	_strs_free(command->args);
+	free(command->args);
+	command->args = args;
+	return (command);
+}
+
+int	command_add_io(
+		t_command *command,
+		t_command_io *cio
+		)
+{
+	command->cio = cio;
+	return (0);
+}
+
+void	command_destroy(
+			t_command *command
+			)
+{
+	if (command->cio != NULL)
+		cio_destroy(command->cio);
+	if (command->args != NULL)
+		args_destroy(command->args);
+	if (command->pn != NULL)
+		free(command->pn);
+	free(command);
 }
 
 // ************************************************************************** //
@@ -183,7 +259,7 @@ t_command	*command_create(
 // ************************************************************************** //
 
 static void	_strs_free(
-				const char **str
+				char **str
 				)
 {
 	while (*str != NULL)
