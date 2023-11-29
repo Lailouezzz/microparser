@@ -1,0 +1,5 @@
+# Project related files
+bin/
+build/
+doc/html
+doc/man
