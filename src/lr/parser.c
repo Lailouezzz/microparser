@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/30 12:38:54 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/30 13:03:19 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ static int	_lr_parser_reduce(
 	data = NULL;
 	if (prod_cb.cb != NULL)
 		data = prod_cb.cb(ctx->stack.data + ctx->stack.used - prod_cb.size,
-			ctx->usrptr);
+				ctx->usrptr);
 	if (prod_cb.cb != NULL && data == NULL)
 		return (1);
 	if (lr_stack_popn(&ctx->stack, prod_cb.size))
