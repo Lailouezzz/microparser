@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 14:08:34 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/30 12:38:54 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,13 @@ static t_lr_action		_lr_parser_get_action(
 // ************************************************************************** //
 
 int	lr_parser_init(
-		t_lr_parser_ctx *ctx
+		t_lr_parser_ctx *ctx,
+		void *usrptr
 		)
 {
 	t_lr_stack_item	axiom;
 
-	if (lr_stack_init(&ctx->stack))
+	if (lr_stack_init(&ctx->stack, usrptr))
 		return (1);
 	axiom = (t_lr_stack_item){.type = ITEM_AXIOM, .data = {}, .state_id = 0};
 	if (lr_stack_push(&ctx->stack, &axiom))
@@ -85,6 +86,7 @@ int	lr_parser_init(
 		lr_stack_destroy(&ctx->stack);
 		return (1);
 	}
+	ctx->usrptr = usrptr;
 	return (0);
 }
 
@@ -189,13 +191,14 @@ static int	_lr_parser_reduce(
 
 	data = NULL;
 	if (prod_cb.cb != NULL)
-		data = prod_cb.cb(ctx->stack.data + ctx->stack.used - prod_cb.size);
+		data = prod_cb.cb(ctx->stack.data + ctx->stack.used - prod_cb.size,
+			ctx->usrptr);
 	if (prod_cb.cb != NULL && data == NULL)
 		return (1);
 	if (lr_stack_popn(&ctx->stack, prod_cb.size))
 	{
 		if (prod_cb.free_cb != NULL)
-			prod_cb.free_cb(data);
+			prod_cb.free_cb(data, ctx->usrptr);
 		return (1);
 	}
 	item = (t_lr_stack_item){

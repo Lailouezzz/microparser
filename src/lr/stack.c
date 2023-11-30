@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:26:00 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 14:08:37 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/30 12:38:36 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@
 // ************************************************************************** //
 
 int	lr_stack_init(
-		t_lr_stack *stack
+		t_lr_stack *stack,
+		void *usrptr
 		)
 {
 	stack->used = 0;
 	stack->alloced = 1;
+	stack->usrptr = usrptr;
 	stack->data = malloc(stack->alloced * sizeof(*stack->data));
 	return (stack->data == NULL);
 }
@@ -56,7 +58,7 @@ void	lr_stack_destroy(
 		if (stack->data[k].type == ITEM_DERIVED
 			&& stack->data[k].data.derived.prod_free_cb != NULL)
 			stack->data[k].data.derived.prod_free_cb(
-				stack->data[k].data.derived.data);
+				stack->data[k].data.derived.data, stack->usrptr);
 		++k;
 	}
 	free(stack->data);

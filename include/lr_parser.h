@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lr_parser.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 13:50:42 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/30 12:06:56 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ typedef struct s_lr_action {
 }	t_lr_action;
 
 typedef struct s_lr_prod_cb {
-	void	*(*cb)(t_lr_stack_item *item);
+	void	*(*cb)(t_lr_stack_item *item, void *usrptr);
 	size_t	size;
-	void	(*free_cb)(void *to_free);
+	void	(*free_cb)(void *to_free, void *usrptr);
 }	t_lr_prod_cb;
 
 typedef struct s_lr_parser_ctx {
@@ -71,6 +71,7 @@ typedef struct s_lr_parser_ctx {
 	size_t			token_count;
 	size_t			prod_count;
 	t_lr_stack		stack;
+	void			*usrptr;
 }	t_lr_parser_ctx;
 
 // ************************************************************************** //
@@ -84,10 +85,12 @@ typedef struct s_lr_parser_ctx {
  * @param ctx The parser context.
  * (prod_cb, action_table, goto_table, state_count, token_count, prod_count)
  *     /!\ MUST BE SET.
+ * @param usrptr The user pointer passed to all callbacks.
  * @return int 0 if success. non null value if error.
  */
 int		lr_parser_init(
-			t_lr_parser_ctx *ctx
+			t_lr_parser_ctx *ctx,
+			void *usrptr
 			);
 
 int		lr_parser_exec(

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lr_stack.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/29 13:50:29 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/11/30 12:38:02 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef enum e_lr_stack_item_type {
 }	t_lr_stack_item_type;
 
 typedef struct s_lr_stack_derived {
-	void	(*prod_free_cb)(void *to_free);
+	void	(*prod_free_cb)(void *to_free, void *usrptr);
 	void	*data;
 }	t_lr_stack_derived;
 
@@ -65,6 +65,7 @@ typedef struct s_lr_stack {
 	t_lr_stack_item	*data;
 	size_t			alloced;
 	size_t			used;
+	void			*usrptr;
 }	t_lr_stack;
 
 // ************************************************************************** //
@@ -74,7 +75,8 @@ typedef struct s_lr_stack {
 // ************************************************************************** //
 
 int				lr_stack_init(
-					t_lr_stack *stack
+					t_lr_stack *stack,
+					void *usrptr
 					);
 
 void			lr_stack_destroy(
