@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:26:00 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/30 12:38:36 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/12/01 23:40:24 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@
 
 int	lr_stack_init(
 		t_lr_stack *stack,
+		t_lr_token_free_cb *token_free_cbs,
 		void *usrptr
 		)
 {
 	stack->used = 0;
 	stack->alloced = 1;
+	stack->token_free_cbs = token_free_cbs;
 	stack->usrptr = usrptr;
 	stack->data = malloc(stack->alloced * sizeof(*stack->data));
 	return (stack->data == NULL);
@@ -59,6 +61,10 @@ void	lr_stack_destroy(
 			&& stack->data[k].data.derived.prod_free_cb != NULL)
 			stack->data[k].data.derived.prod_free_cb(
 				stack->data[k].data.derived.data, stack->usrptr);
+		else if (stack->data[k].type == ITEM_TOKEN
+			&& stack->token_free_cbs[stack->data[k].data.token.id] != NULL)
+			stack->token_free_cbs[stack->data[k].data.token.id](
+				&stack->data[k].data.token.data);
 		++k;
 	}
 	free(stack->data);
@@ -78,14 +84,20 @@ int	lr_stack_push(
 		const t_lr_stack_item *item
 		)
 {
+	t_lr_stack_item	*tmp;
+
 	if (stack->used >= stack->alloced)
 	{
+		tmp = stack->data;
 		stack->data
 			= ft_realloc(stack->data, stack->alloced * sizeof(*stack->data),
 				stack->alloced * 2 * sizeof(*stack->data));
 		stack->alloced *= 2;
 		if (stack->data == NULL)
+		{
+			stack->data = tmp;
 			return (1);
+		}
 	}
 	ft_memcpy(stack->data + stack->used, item, sizeof(*item));
 	++stack->used;

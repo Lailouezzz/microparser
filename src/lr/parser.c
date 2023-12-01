@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/30 13:03:19 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/12/01 22:56:26 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@
 
 static int				_lr_parser_exec(
 							t_lr_parser_ctx *ctx,
-							t_lr_token *tokens,
-							size_t *k
+							const t_lr_token *tokens
 							);
 
 static int				_lr_parser_shift(
@@ -62,7 +61,7 @@ static t_lr_prod_cb		_lr_parser_get_prod_cb(
 
 static t_lr_action		_lr_parser_get_action(
 							t_lr_parser_ctx *ctx,
-							t_lr_token	token
+							const t_lr_token *token
 							);
 
 // ************************************************************************** //
@@ -78,7 +77,7 @@ int	lr_parser_init(
 {
 	t_lr_stack_item	axiom;
 
-	if (lr_stack_init(&ctx->stack, usrptr))
+	if (lr_stack_init(&ctx->stack, ctx->token_free_cbs, usrptr))
 		return (1);
 	axiom = (t_lr_stack_item){.type = ITEM_AXIOM, .data = {}, .state_id = 0};
 	if (lr_stack_push(&ctx->stack, &axiom))
@@ -92,33 +91,23 @@ int	lr_parser_init(
 
 int	lr_parser_exec(
 		t_lr_parser_ctx *ctx,
-		t_lr_token *tokens,
-		size_t nb,
+		const t_lr_token *token,
 		void **derived
 		)
 {
-	size_t	k;
-	int		r;
+	int	r;
 
-	k = 0;
-	while (k < nb)
-	{
-		r = _lr_parser_exec(ctx, tokens, &k);
-		if (r == 2)
-			break ;
-		if (r == 1)
-			return (1);
-	}
-	++k;
-	if (k != nb || lr_stack_used(&ctx->stack) != 2
-		|| ctx->stack.data[1].type != ITEM_DERIVED)
+	r = _lr_parser_exec(ctx, token);
+	if (r != MP_ACCEPT)
+		return (r);
+	if (lr_stack_used(&ctx->stack) != 2)
 	{
 		lr_stack_destroy(&ctx->stack);
-		return (1);
+		return (MP_ERROR);
 	}
 	*derived = ctx->stack.data[1].data.derived.data;
 	ctx->stack.used = 1;
-	return (0);
+	return (MP_ACCEPT);
 }
 
 void	lr_parser_destroy(
@@ -136,34 +125,33 @@ void	lr_parser_destroy(
 
 static int	_lr_parser_exec(
 				t_lr_parser_ctx *ctx,
-				t_lr_token *tokens,
-				size_t *k
+				const t_lr_token *token
 				)
 {
-	const t_lr_action	action = _lr_parser_get_action(ctx, tokens[*k]);
+	const t_lr_action	action = _lr_parser_get_action(ctx, token);
 
 	if (action.type == ACTION_ACCEPT)
-	{
-		return (2);
-	}
+		return (MP_ACCEPT);
 	else if (action.type == ACTION_SHIFT
-		&& _lr_parser_shift(ctx, tokens[(*k)++], action.data.shift_id))
+		&& _lr_parser_shift(ctx, *token, action.data.shift_id))
 	{
 		lr_stack_destroy(&ctx->stack);
-		return (1);
+		return (MP_ERROR);
 	}
 	else if (action.type == ACTION_REDUCE
 		&& _lr_parser_reduce(ctx, action.data.reduce_id))
 	{
 		lr_stack_destroy(&ctx->stack);
-		return (1);
+		return (MP_ERROR);
 	}
 	else if (action.type == ACTION_ERROR)
 	{
 		lr_stack_destroy(&ctx->stack);
-		return (1);
+		return (MP_ERROR);
 	}
-	return (0);
+	if (action.type != ACTION_SHIFT)
+		return (_lr_parser_exec(ctx, token));
+	return (MP_OK);
 }
 
 static int	_lr_parser_shift(
@@ -231,10 +219,10 @@ static t_lr_prod_cb	_lr_parser_get_prod_cb(
 
 static t_lr_action	_lr_parser_get_action(
 						t_lr_parser_ctx *ctx,
-						t_lr_token	token
+						const t_lr_token *token
 						)
 {
 	const t_lr_state_id	cur_state = lr_stack_cur_state(&ctx->stack);
 
-	return (ctx->action_table[ctx->token_count * cur_state + token.id]);
+	return (ctx->action_table[ctx->token_count * cur_state + token->id]);
 }

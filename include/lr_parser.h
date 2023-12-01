@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lr_parser.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 01:33:50 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/30 12:06:56 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/12/01 21:30:12 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,15 @@ typedef struct s_lr_prod_cb {
 }	t_lr_prod_cb;
 
 typedef struct s_lr_parser_ctx {
-	t_lr_prod_cb	*prod_cb;
-	t_lr_action		*action_table;
-	t_lr_state_id	*goto_table;
-	size_t			state_count;
-	size_t			token_count;
-	size_t			prod_count;
-	t_lr_stack		stack;
-	void			*usrptr;
+	t_lr_prod_cb		*prod_cb;
+	t_lr_token_free_cb	*token_free_cbs;
+	t_lr_action			*action_table;
+	t_lr_state_id		*goto_table;
+	size_t				state_count;
+	size_t				token_count;
+	size_t				prod_count;
+	t_lr_stack			stack;
+	void				*usrptr;
 }	t_lr_parser_ctx;
 
 // ************************************************************************** //
@@ -93,10 +94,13 @@ int		lr_parser_init(
 			void *usrptr
 			);
 
+# define MP_ERROR 1
+# define MP_ACCEPT 2
+# define MP_OK 0
+
 int		lr_parser_exec(
 			t_lr_parser_ctx *ctx,
-			t_lr_token *tokens,
-			size_t nb,
+			const t_lr_token *token,
 			void **derived
 			);
 

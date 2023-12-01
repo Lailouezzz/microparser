@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lr_stack.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-boud <ale-boud@student.42lehavre.fr    +#+  +:+       +#+        */
+/*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/11/30 12:38:02 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/12/01 20:30:10 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,11 @@ typedef struct s_lr_stack_item {
 }	t_lr_stack_item;
 
 typedef struct s_lr_stack {
-	t_lr_stack_item	*data;
-	size_t			alloced;
-	size_t			used;
-	void			*usrptr;
+	t_lr_stack_item		*data;
+	t_lr_token_free_cb	*token_free_cbs;
+	size_t				alloced;
+	size_t				used;
+	void				*usrptr;
 }	t_lr_stack;
 
 // ************************************************************************** //
@@ -76,6 +77,7 @@ typedef struct s_lr_stack {
 
 int				lr_stack_init(
 					t_lr_stack *stack,
+					t_lr_token_free_cb *token_free_cbs,
 					void *usrptr
 					);
 
