@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 04:45:46 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/12/01 22:56:26 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/12/11 21:44:09 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,14 +181,14 @@ static int	_lr_parser_reduce(
 	if (prod_cb.cb != NULL)
 		data = prod_cb.cb(ctx->stack.data + ctx->stack.used - prod_cb.size,
 				ctx->usrptr);
-	if (prod_cb.cb != NULL && data == NULL)
-		return (1);
 	if (lr_stack_popn(&ctx->stack, prod_cb.size))
 	{
 		if (prod_cb.free_cb != NULL)
 			prod_cb.free_cb(data, ctx->usrptr);
 		return (1);
 	}
+	if (prod_cb.cb != NULL && data == NULL)
+		return (1);
 	item = (t_lr_stack_item){
 		.type = ITEM_DERIVED,
 		.data.derived = {
