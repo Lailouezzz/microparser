@@ -6,7 +6,7 @@
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 00:32:25 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/12/01 20:30:10 by ale-boud         ###   ########.fr       */
+/*   Updated: 2023/12/14 02:20:20 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <stddef.h>
 
 # include "lr_token.h"
+# include "lr_error.h"
 # include "lr_type.h"
 
 // ************************************************************************** //
@@ -38,30 +39,35 @@
 // *                                                                        * //
 // ************************************************************************** //
 
-typedef enum e_lr_stack_item_type {
+typedef enum e_lr_stack_item_type
+{
 	ITEM_TOKEN,
 	ITEM_DERIVED,
 	ITEM_AXIOM,
 	ITEM__COUNT,
 }	t_lr_stack_item_type;
 
-typedef struct s_lr_stack_derived {
+typedef struct s_lr_stack_derived
+{
 	void	(*prod_free_cb)(void *to_free, void *usrptr);
 	void	*data;
 }	t_lr_stack_derived;
 
-typedef union u_lr_stack_item_data {
+typedef union u_lr_stack_item_data
+{
 	t_lr_token			token;
 	t_lr_stack_derived	derived;
 }	t_lr_stack_item_data;
 
-typedef struct s_lr_stack_item {
+typedef struct s_lr_stack_item
+{
 	t_lr_stack_item_type	type;
 	t_lr_stack_item_data	data;
 	t_lr_state_id			state_id;
 }	t_lr_stack_item;
 
-typedef struct s_lr_stack {
+typedef struct s_lr_stack
+{
 	t_lr_stack_item		*data;
 	t_lr_token_free_cb	*token_free_cbs;
 	size_t				alloced;
@@ -75,7 +81,7 @@ typedef struct s_lr_stack {
 // *                                                                        * //
 // ************************************************************************** //
 
-int				lr_stack_init(
+t_lr_error		lr_stack_init(
 					t_lr_stack *stack,
 					t_lr_token_free_cb *token_free_cbs,
 					void *usrptr
@@ -89,17 +95,17 @@ size_t			lr_stack_used(
 					const t_lr_stack *stack
 					);
 
-int				lr_stack_push(
+t_lr_error		lr_stack_push(
 					t_lr_stack *stack,
 					const t_lr_stack_item *item
 					);
 
-int				lr_stack_pop(
+t_lr_error		lr_stack_pop(
 					t_lr_stack *stack,
 					t_lr_stack_item *item
 					);
 
-int				lr_stack_popn(
+t_lr_error		lr_stack_popn(
 					t_lr_stack *stack,
 					size_t count
 					);

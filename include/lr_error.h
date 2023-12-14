@@ -1,50 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lr_token.h                                         :+:      :+:    :+:   */
+/*   lr_error.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ale-boud <ale-boud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/29 13:36:04 by ale-boud          #+#    #+#             */
-/*   Updated: 2023/12/14 02:40:23 by ale-boud         ###   ########.fr       */
+/*   Created: 2023/12/14 02:10:18 by ale-boud          #+#    #+#             */
+/*   Updated: 2023/12/14 02:39:54 by ale-boud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file lr_token.h
+ * @file lr_error.h
  * @author ale-boud (ale-boud@student.42.fr)
- * @brief Definition of tokens.
- * @date 2023-11-29
+ * @brief Error definition.
+ * @date 2023-12-14
  * @copyright Copyright (c) 2023
  */
 
-#ifndef LR_TOKEN_H
-# define LR_TOKEN_H
+#ifndef LR_ERROR_H
+# define LR_ERROR_H
 
 // ************************************************************************** //
 // *                                                                        * //
-// * Structure definitions.                                                 * //
+// * Error definition.                                                      * //
 // *                                                                        * //
 // ************************************************************************** //
 
-# ifdef MP_TOKEN_TYPE
-
-typedef MP_TOKEN_TYPE	t_lr_token_type;
-
-# else
-
-#  error MP_TOKEN_TYPE must be defined !
-
-# endif
-
-typedef int				t_lr_token_id;
-
-typedef void			(*t_lr_token_free_cb)(t_lr_token_type *data);
-
-typedef struct s_lr_token
+typedef enum e_lr_error
 {
-	t_lr_token_id	id;
-	t_lr_token_type	data;
-}	t_lr_token;
+	/** @brief OK. */
+	LR_OK,
+	/** Congratulation expression parsed. */
+	LR_ACCEPT,
+	/** @brief Malloc returning NULL (buy more ram :3). */
+	LR_BAD_ALLOC,
+	/** Parser syntax error. */
+	LR_SYNTAX_ERROR,
+	/** @brief Prod callback error (an prod cb return NULL). */
+	LR_PROD_ERROR,
+	/** @brief Parser internal error (maybe you fucked'up the LR table ?). */
+	LR_INTERNAL_ERROR,
+}	t_lr_error;
 
 #endif
