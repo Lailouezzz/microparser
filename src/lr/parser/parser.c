@@ -32,6 +32,16 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Initialize the LR parser context.
+ *
+ * Creates the parser stack with initial axiom state and sets up
+ * all necessary callbacks and user pointer.
+ *
+ * @param ctx Parser context to initialize.
+ * @param usrptr User pointer to be passed to all callbacks.
+ * @return LR_OK on success, error code on failure.
+ */
 int	lr_parser_init(
 		t_lr_parser_ctx *ctx,
 		void *usrptr
@@ -54,6 +64,18 @@ int	lr_parser_init(
 	return (LR_OK);
 }
 
+/**
+ * @brief Execute the LR parser on a token.
+ *
+ * Processes the given token through the parser, performing all necessary
+ * shifts and reductions. On successful parse completion (LR_ACCEPT),
+ * extracts the final derived value from the stack.
+ *
+ * @param ctx Parser context.
+ * @param token Token to process.
+ * @param derived Output pointer to receive the final derived value on accept.
+ * @return LR_ACCEPT on successful completion, other error codes on failure.
+ */
 t_lr_error	lr_parser_exec(
 				t_lr_parser_ctx *ctx,
 				const t_lr_token *token,
@@ -75,6 +97,13 @@ t_lr_error	lr_parser_exec(
 	return (LR_ACCEPT);
 }
 
+/**
+ * @brief Destroy the parser context.
+ *
+ * Frees all resources associated with the parser, including the stack.
+ *
+ * @param ctx Parser context to destroy.
+ */
 void	lr_parser_destroy(
 			t_lr_parser_ctx *ctx
 			)

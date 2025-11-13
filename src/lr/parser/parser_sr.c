@@ -32,6 +32,17 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Internal recursive parser execution.
+ *
+ * Implements the core LR parsing algorithm. Gets the action for the current
+ * state and token, then performs the appropriate operation. For reduce actions,
+ * recursively processes the same token after reduction.
+ *
+ * @param ctx Parser context.
+ * @param token Current token to process.
+ * @return LR_ACCEPT on success, error code on failure.
+ */
 t_lr_error	_lr_parser_exec(
 						t_lr_parser_ctx *ctx,
 						const t_lr_token *token
@@ -61,6 +72,17 @@ t_lr_error	_lr_parser_exec(
 	return (LR_OK);
 }
 
+/**
+ * @brief Perform a shift operation.
+ *
+ * Creates a new stack item with the given token and target state,
+ * then pushes it onto the parser stack.
+ *
+ * @param ctx Parser context.
+ * @param token Token to shift.
+ * @param state_id Target state ID.
+ * @return LR_OK on success, error code on failure.
+ */
 t_lr_error	_lr_parser_shift(
 				t_lr_parser_ctx *ctx,
 				t_lr_token token,
@@ -75,6 +97,16 @@ t_lr_error	_lr_parser_shift(
 	return (lr_stack_push(&ctx->stack, &item));
 }
 
+/**
+ * @brief Perform a reduce operation.
+ *
+ * Invokes the production callback with the items to be reduced, pops them
+ * from the stack, then pushes the derived value with the appropriate goto state.
+ *
+ * @param ctx Parser context.
+ * @param prod_id Production rule ID to reduce by.
+ * @return LR_OK on success, error code on failure (including LR_PROD_ERROR).
+ */
 t_lr_error	_lr_parser_reduce(
 				t_lr_parser_ctx *ctx,
 				t_lr_prod_id prod_id
@@ -105,6 +137,17 @@ t_lr_error	_lr_parser_reduce(
 	return (lr_stack_push(&ctx->stack, &item));
 }
 
+/**
+ * @brief Look up the goto state in the goto table.
+ *
+ * Calculates the index into the goto table based on the current state
+ * and production ID, then returns the target state.
+ *
+ * @param ctx Parser context.
+ * @param state_id Current state ID.
+ * @param prod_id Production ID.
+ * @return Target state ID from the goto table.
+ */
 t_lr_state_id	_lr_parser_get_goto(
 							t_lr_parser_ctx *ctx,
 							t_lr_state_id state_id,
@@ -114,6 +157,16 @@ t_lr_state_id	_lr_parser_get_goto(
 	return (ctx->goto_table[ctx->prod_count * state_id + prod_id]);
 }
 
+/**
+ * @brief Look up the action in the action table.
+ *
+ * Gets the current state from the stack, then looks up the action
+ * for this state and the given token in the action table.
+ *
+ * @param ctx Parser context.
+ * @param token Current token.
+ * @return The action to perform.
+ */
 t_lr_action	_lr_parser_get_action(
 						t_lr_parser_ctx *ctx,
 						const t_lr_token *token

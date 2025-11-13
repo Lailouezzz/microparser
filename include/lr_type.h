@@ -27,7 +27,20 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Identifier for LR parser states.
+ *
+ * This type represents the state identifier in the LR parsing automaton.
+ * Each state in the parsing table is identified by a unique integer value.
+ */
 typedef int	t_lr_state_id;
+
+/**
+ * @brief Identifier for production rules.
+ *
+ * This type represents a production rule identifier in the grammar.
+ * Each production rule used for reductions is identified by a unique integer.
+ */
 typedef int	t_lr_prod_id;
 
 #endif

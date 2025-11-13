@@ -27,19 +27,25 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Error codes returned by the LR parser functions.
+ *
+ * This enumeration defines all possible error codes that can be returned
+ * by the LR parser during parsing operations.
+ */
 typedef enum e_lr_error
 {
-	/** @brief OK. */
+	/** @brief Success, operation completed without errors. */
 	LR_OK,
-	/** Congratulation expression parsed. */
+	/** @brief Input successfully parsed, parsing completed. */
 	LR_ACCEPT,
-	/** @brief Malloc returning NULL (buy more ram :3). */
+	/** @brief Memory allocation failure. */
 	LR_BAD_ALLOC,
-	/** Parser syntax error. */
+	/** @brief Syntax error encountered during parsing. */
 	LR_SYNTAX_ERROR,
-	/** @brief Prod callback error (an prod cb return NULL). */
+	/** @brief Production callback returned NULL, indicating an error. */
 	LR_PROD_ERROR,
-	/** @brief Parser internal error (maybe you fucked'up the LR table ?). */
+	/** @brief Internal parser error, possibly due to malformed LR tables. */
 	LR_INTERNAL_ERROR,
 }	t_lr_error;
 

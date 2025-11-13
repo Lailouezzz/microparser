@@ -34,6 +34,17 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Initialize a parser stack.
+ *
+ * Allocates initial memory for the stack and sets up the token free callbacks.
+ * The stack starts with an initial capacity of 1 item.
+ *
+ * @param stack Pointer to the stack to initialize.
+ * @param token_free_cbs Array of token free callbacks indexed by token ID.
+ * @param usrptr User pointer passed to all callbacks.
+ * @return LR_OK on success, LR_BAD_ALLOC on allocation failure.
+ */
 t_lr_error	lr_stack_init(
 				t_lr_stack *stack,
 				t_lr_token_free_cb *token_free_cbs,
@@ -50,6 +61,14 @@ t_lr_error	lr_stack_init(
 	return (LR_OK);
 }
 
+/**
+ * @brief Destroy a parser stack and free all resources.
+ *
+ * Iterates through all items on the stack and frees them by calling their
+ * appropriate callbacks. Then frees the stack array itself and resets counters.
+ *
+ * @param stack Pointer to the stack to destroy.
+ */
 void	lr_stack_destroy(
 			t_lr_stack *stack
 			)

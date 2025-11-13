@@ -34,6 +34,12 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Get the number of items on the stack.
+ *
+ * @param stack Pointer to the stack.
+ * @return Number of items currently on the stack.
+ */
 size_t	lr_stack_used(
 			const t_lr_stack *stack
 			)
@@ -41,6 +47,16 @@ size_t	lr_stack_used(
 	return (stack->used);
 }
 
+/**
+ * @brief Push an item onto the stack.
+ *
+ * Copies the given item onto the top of the stack. If the stack is full,
+ * it is automatically grown by doubling its capacity.
+ *
+ * @param stack Pointer to the stack.
+ * @param item Pointer to the item to push.
+ * @return LR_OK on success, LR_BAD_ALLOC on allocation failure.
+ */
 t_lr_error	lr_stack_push(
 				t_lr_stack *stack,
 				const t_lr_stack_item *item
@@ -66,6 +82,16 @@ t_lr_error	lr_stack_push(
 	return (LR_OK);
 }
 
+/**
+ * @brief Pop an item from the stack.
+ *
+ * Removes the top item from the stack and optionally copies it to
+ * the provided buffer. The item is not freed by this function.
+ *
+ * @param stack Pointer to the stack.
+ * @param item Optional pointer to receive the popped item (can be NULL).
+ * @return LR_OK on success, LR_INTERNAL_ERROR if stack is empty.
+ */
 t_lr_error	lr_stack_pop(
 				t_lr_stack *stack,
 				t_lr_stack_item *item
@@ -79,6 +105,16 @@ t_lr_error	lr_stack_pop(
 	return (LR_OK);
 }
 
+/**
+ * @brief Pop multiple items from the stack.
+ *
+ * Removes count items from the top of the stack without freeing them.
+ * This is used during reduce operations.
+ *
+ * @param stack Pointer to the stack.
+ * @param count Number of items to pop.
+ * @return LR_OK on success, LR_INTERNAL_ERROR if not enough items on stack.
+ */
 t_lr_error	lr_stack_popn(
 				t_lr_stack *stack,
 				size_t count
@@ -95,6 +131,15 @@ t_lr_error	lr_stack_popn(
 	return (LR_OK);
 }
 
+/**
+ * @brief Get the current state ID from the top of the stack.
+ *
+ * Returns the state ID associated with the top item on the stack.
+ * This is used to determine the current parser state.
+ *
+ * @param stack Pointer to the stack.
+ * @return The state ID of the top stack item.
+ */
 t_lr_state_id	lr_stack_cur_state(
 					t_lr_stack *stack
 					)

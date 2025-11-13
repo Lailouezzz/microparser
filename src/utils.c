@@ -32,6 +32,17 @@
 // *                                                                        * //
 // ************************************************************************** //
 
+/**
+ * @brief Reallocate a memory block.
+ *
+ * Allocates a new block of the requested size, copies the old data into it,
+ * and frees the old block. If allocation fails, the old block is still freed.
+ *
+ * @param p Pointer to the old memory block.
+ * @param oldsize Size of the old block in bytes.
+ * @param newsize Size of the new block in bytes.
+ * @return Pointer to the new block, or NULL on allocation failure.
+ */
 void	*ft_realloc(
 			void *p,
 			size_t oldsize,
@@ -51,6 +62,17 @@ void	*ft_realloc(
 	return (newp);
 }
 
+/**
+ * @brief Copy memory area.
+ *
+ * Copies n bytes from src to dst. The copy is performed backwards
+ * to handle potential overlaps safely.
+ *
+ * @param dst Pointer to destination memory area.
+ * @param src Pointer to source memory area.
+ * @param n Number of bytes to copy.
+ * @return Pointer to dst.
+ */
 void	*ft_memcpy(
 			void *dst,
 			const void *src,
@@ -71,6 +93,14 @@ void	*ft_memcpy(
 	return (dst);
 }
 
+/**
+ * @brief Calculate the length of a string.
+ *
+ * Counts the number of characters in the string until the null terminator.
+ *
+ * @param str Pointer to null-terminated string.
+ * @return Length of the string (excluding null terminator).
+ */
 int	ft_strlen(
 		const char *str
 		)
@@ -83,6 +113,15 @@ int	ft_strlen(
 	return (k);
 }
 
+/**
+ * @brief Duplicate a string.
+ *
+ * Allocates memory for a new string and copies the content of the
+ * original string into it, including the null terminator.
+ *
+ * @param str Pointer to null-terminated string to duplicate.
+ * @return Pointer to the newly allocated duplicate string, or NULL on failure.
+ */
 char	*ft_strdup(
 			const char *str
 			)
